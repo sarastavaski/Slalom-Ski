@@ -1,10 +1,10 @@
-variable "domain_name" {
-  description = "domain name (or application name if no domain name available)"
+variable "failover-bucket-regional-domain-name" {
+  description = "regional domain name of failover region bucket"
 }
 
-#variable "failover-bucket-regional-domain-name" {
-#  description = "regional domain name of failover region bucket"
-#}
+variable "primary-bucket-regional-domain-name" {
+  description = "regional domain name of primary region bucket"
+}
 
 variable "tags" {
   type        = map(string)
@@ -12,29 +12,9 @@ variable "tags" {
   description = "tags for all the resources, if any"
 }
 
-variable "hosted_zone" {
-  default     = null
-  description = "Route53 hosted zone"
-}
-
-variable "acm_certificate_domain" {
-  default     = null
-  description = "Domain of the ACM certificate"
-}
-
 variable "price_class" {
   default     = "PriceClass_100" // Only US,Canada,Europe
   description = "CloudFront distribution price class"
-}
-
-variable "use_default_domain" {
-  default     = false
-  description = "Use CloudFront website address without Route53 and ACM certificate"
-}
-
-variable "upload_sample_file" {
-  default     = false
-  description = "Upload sample html file to s3 bucket"
 }
 
 # All values for the TTL are important when uploading static content that changes

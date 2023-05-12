@@ -1,7 +1,4 @@
 resource "aws_cloudfront_distribution" "s3_distribution" {
-  depends_on = [
-    aws_s3_bucket.s3_bucket
-  ]
   origin_group {
     origin_id = "groupS3"
 
@@ -19,11 +16,12 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   }
 
   origin {
-    domain_name = aws_s3_bucket.s3_bucket.bucket_regional_domain_name
+    domain_name = var.primary-bucket-regional-domain-name
     origin_id   = "primaryS3"
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path
+      origin_access_identity = "origin-access-identity/cloudfront/EKS9QQTXUTLKE"
+      #origin_access_identity = aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path
     }
   }
 
@@ -32,7 +30,8 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
     origin_id   = "failoverS3"
 
     s3_origin_config {
-      origin_access_identity = aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path
+      origin_access_identity = "origin-access-identity/cloudfront/E3J5HBQJ8OQJGW"
+      #origin_access_identity = aws_cloudfront_origin_access_identity.default.cloudfront_access_identity_path
     }
   }
 
@@ -40,7 +39,6 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
   is_ipv6_enabled     = true
   default_root_object = "index.html"
 
-  aliases = local.domain_name
 
   default_cache_behavior {
     allowed_methods = [
@@ -79,20 +77,9 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
       locations = []
     }
   }
-  dynamic "viewer_certificate" {
-    for_each = local.default_certs
-    content {
-      cloudfront_default_certificate = true
-    }
-  }
-
-  dynamic "viewer_certificate" {
-    for_each = local.acm_certs
-    content {
-      acm_certificate_arn      = data.aws_acm_certificate.acm_cert[0].arn
-      ssl_support_method       = "sni-only"
-      minimum_protocol_version = "TLSv1"
-    }
+  
+  viewer_certificate {
+    cloudfront_default_certificate = true
   }
 
   custom_error_response {
@@ -104,8 +91,4 @@ resource "aws_cloudfront_distribution" "s3_distribution" {
 
   wait_for_deployment = false
   tags                = var.tags
-}
-
-resource "aws_cloudfront_origin_access_identity" "origin_access_identity" {
-  comment = "access-identity-${var.domain_name}.s3.amazonaws.com"
 }
