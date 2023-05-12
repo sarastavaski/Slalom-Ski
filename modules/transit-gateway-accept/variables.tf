@@ -1,0 +1,1 @@
+variable "transit-gateway-attachment-id" {}
