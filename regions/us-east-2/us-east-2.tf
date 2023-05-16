@@ -12,8 +12,8 @@ module "vpc" {
   availability-zones      = ["us-east-2a", "us-east-2b", "us-east-2c"]
   vpc-public-subnet-cidr  = ["10.2.2.0/23", "10.2.4.0/23", "10.2.6.0/23"]
   vpc-private-subnet-cidr = ["10.2.8.0/23", "10.2.10.0/23", "10.2.12.0/23"]
-  tgw-route-cidr         =  "10.1.0.0/20"
-  transit_gateway_id     = module.transit-gateway.EC2_Transit_Gateway_identifier_ID
+  tgw-route-cidr          =  "10.1.0.0/20"
+  transit_gateway_id      = module.transit-gateway.EC2_Transit_Gateway_identifier_ID
 }
 
 module "transit-gateway" {
@@ -32,6 +32,8 @@ module "transit-gateway" {
   aws_ec2_transit_gateway_vpc_attachment_name     = "ski-us-east-2-tgw-attachments"
   transit_gateway_default_route_table_association = "true"
   transit_gateway_default_route_table_propagation = "true"
+  other-region-cidr                               = "10.1.0.0/20"
+  transit-gateway-attachment-id                   = "tgw-attach-0a4d5843e49ab90be"
 }
 
 module "transit-gateway-accept" {

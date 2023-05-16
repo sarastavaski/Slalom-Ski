@@ -29,3 +29,16 @@ resource "aws_ec2_transit_gateway_vpc_attachment" "aws_ec2_transit_gateway_vpc_a
   transit_gateway_default_route_table_propagation = var.transit_gateway_default_route_table_propagation
 
 }
+
+
+#  Creating Transit Gateway Route table
+
+resource "aws_ec2_transit_gateway_route_table" "aws_ec2_transit_gateway_route_table" {
+  transit_gateway_id = aws_ec2_transit_gateway.aws_ec2_transit_gateway.id
+}
+
+resource "aws_ec2_transit_gateway_route" "aws_ec2_transit_gateway_route" {
+  destination_cidr_block         = var.other-region-cidr
+  transit_gateway_attachment_id  = var.transit-gateway-attachment-id
+  transit_gateway_route_table_id = aws_ec2_transit_gateway.aws_ec2_transit_gateway.association_default_route_table_id
+}

@@ -4,6 +4,6 @@ resource "aws_ec2_transit_gateway_peering_attachment" "peering" {
   transit_gateway_id      = var.local-transit-gateway-id
 
   tags = {
-    Name = "TGW Peering Requestor"
+    Name = "eu-west-1"
   }
 }
