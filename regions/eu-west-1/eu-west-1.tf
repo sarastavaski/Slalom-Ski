@@ -32,6 +32,8 @@ module "transit-gateway" {
   aws_ec2_transit_gateway_vpc_attachment_name     = "ski-eu-west-1-tgw-attachments"
   transit_gateway_default_route_table_association = "true"
   transit_gateway_default_route_table_propagation = "true"
+  other-region-cidr                               = "10.2.0.0/20"   
+  transit-gateway-attachment-id                   = "tgw-attach-0a4d5843e49ab90be"                  
 }
 
 module "transit-gateway-peer" {
